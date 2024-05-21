@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class AuthDatasource {
   Future<RegisterResponseModel> register(RegisterModel registerModel) async {
     final response = await http.post(
-      Uri.parse('https://c705-103-121-122-197.ngrok-free.app/signin'),
+      Uri.parse('https://bda7-103-166-147-253.ngrok-free.app/signup'),
       body: registerModel.toMap(),
     );
 
@@ -18,7 +18,7 @@ class AuthDatasource {
 
   Future<LoginResponseModel> login(LoginModel loginModel) async {
     final response = await http.post(
-      Uri.parse('https://c705-103-121-122-197.ngrok-free.app/signin'),
+      Uri.parse('https://bda7-103-166-147-253.ngrok-free.app/signin'),
       body: loginModel.toMap(),
     );
 

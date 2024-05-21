@@ -2,7 +2,11 @@
 
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/presentation/pages/artikel_page.dart';
+import 'package:facemask_application/presentation/pages/camera_page.dart';
 import 'package:facemask_application/presentation/pages/login_page.dart';
+import 'package:facemask_application/presentation/pages/profile_page.dart';
+import 'package:facemask_application/presentation/pages/realtime_page.dart';
+import 'package:facemask_application/presentation/pages/realtime_web_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,42 +69,63 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // How do you fill card
             Container(
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(209, 209, 239, 1),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.only(bottom: 20),
-                child: ListTile(
-                  trailing: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                      'https://avatars.githubusercontent.com/u/22272400?s=400&u=c9ca914d05b0e941d33239286e974d66590ab6f5&v=4',
-                    ),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(209, 209, 239, 1),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome Back",
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        width: 120,
+                        child: Text(
+                          "Your Email",
+                          style: TextStyle(color: Colors.black87, fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
-                  title: Text(
-                    'Welcome Back',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
+                    child: const CircleAvatar(
+                      radius: 30.0,
+                      backgroundImage: NetworkImage(
+                        'https://avatars.githubusercontent.com/u/22272400?s=400&u=c9ca914d05b0e941d33239286e974d66590ab6f5&v=4',
+                      ),
                     ),
-                  ),
-                  subtitle: Text(
-                    'Your Email Address',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                  )
+                ],
               ),
             ),
+
+            SizedBox(height: 10),
+
             const SizedBox(height: 20), // Spasi antara kedua kontainer
             Container(
               decoration: const BoxDecoration(
@@ -131,7 +156,12 @@ class _HomePageState extends State<HomePage> {
                             height: 10), // Spasi antara teks dan gambar
                         ElevatedButton(
                           onPressed: () {
-                            // Fungsi yang dijalankan saat tombol ditekan
+                            // Pindah ke halaman CameraAccessPage saat tombol ditekan
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const YoloVideo()),
+                            );
                           },
                           child: const Text('Get Started'),
                         ),
@@ -167,7 +197,11 @@ class _HomePageState extends State<HomePage> {
                   const Color.fromRGBO(255, 218, 240, 1),
                 ),
                 _buildColumnWithButton('FaceMask', 'images/img2.png',
-                    const Color.fromRGBO(209, 209, 239, 1), () {}),
+                    const Color.fromRGBO(209, 209, 239, 1), () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CameraView();
+                  }));
+                }),
                 _buildColumnWithButton('Article', 'images/img3.png',
                     const Color.fromRGBO(209, 209, 239, 1), () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {

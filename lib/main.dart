@@ -4,6 +4,7 @@ import 'package:facemask_application/data/datasources/auth_datasources.dart';
 import 'package:facemask_application/presentation/pages/home_page.dart';
 import 'package:facemask_application/presentation/pages/login_page.dart';
 import 'package:facemask_application/presentation/pages/onboarding_page.dart';
+import 'package:facemask_application/presentation/pages/profile_page.dart';
 import 'package:facemask_application/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

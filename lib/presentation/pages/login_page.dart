@@ -105,9 +105,13 @@ class _LoginPageState extends State<LoginPage> {
                   passwordController!.clear();
                   //navigasi
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                         backgroundColor: Colors.blue,
-                        content: Text('success login')),
+                        content: Text(
+                          'Successfull Login',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        )),
                   );
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const HomePage();
