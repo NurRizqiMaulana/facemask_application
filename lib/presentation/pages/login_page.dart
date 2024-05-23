@@ -19,20 +19,29 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController? emailController;
   TextEditingController? passwordController;
 
+  bool _isObscured = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+  }
+
   @override
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
 
     isLogin();
-    Future.delayed(Duration(seconds: 2));
+    Future.delayed(Duration(seconds: 1));
     super.initState();
   }
 
   void isLogin() async {
     final isTokenExist = await AuthLocalStorage().isTokenExist();
+    print(isTokenExist);
     if (isTokenExist) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return HomePage();
       }));
     }
@@ -88,11 +97,17 @@ class _LoginPageState extends State<LoginPage> {
               height: 16,
             ),
             TextField(
-              obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isObscured ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ),
               ),
+              obscureText: _isObscured,
               controller: passwordController,
             ),
             const SizedBox(
@@ -113,7 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                           textAlign: TextAlign.center,
                         )),
                   );
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
                     return const HomePage();
                   }));
                 }
@@ -141,7 +157,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
                   return const RegisterPage();
                 }));
               },

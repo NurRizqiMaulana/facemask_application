@@ -20,6 +20,14 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController? emailController;
   TextEditingController? passwordController;
 
+  bool _isObscured = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(
-                    height: 50.0,
+                    height: 100.0,
                   ),
                   const Text(
                     "Register Page",
@@ -98,11 +106,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 16,
                   ),
                   TextField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscured ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: _togglePasswordVisibility,
+                      ),
                     ),
+                    obscureText: _isObscured,
                     controller: passwordController,
                   ),
                   const SizedBox(
@@ -159,6 +173,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Sudah Punya Akun? Login',
                       style: TextStyle(decoration: TextDecoration.underline),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 28.0,
                   ),
                 ],
               ),

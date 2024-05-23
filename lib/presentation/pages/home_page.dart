@@ -2,12 +2,14 @@
 
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/presentation/pages/artikel_page.dart';
-import 'package:facemask_application/presentation/pages/camera_page.dart';
 import 'package:facemask_application/presentation/pages/login_page.dart';
 import 'package:facemask_application/presentation/pages/profile_page.dart';
 import 'package:facemask_application/presentation/pages/realtime_page.dart';
 import 'package:facemask_application/presentation/pages/realtime_web_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/profile/profile_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +20,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    context.read<ProfileBloc>().add(GetProfileEvent());
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -70,58 +77,75 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             // How do you fill card
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(209, 209, 239, 1),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Welcome Back",
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        width: 120,
-                        child: Text(
-                          "Your Email",
-                          style: TextStyle(color: Colors.black87, fontSize: 13),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, state) {
+                if (state is ProfileLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state is ProfileLoaded) {
+                  return Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(209, 209, 239, 1),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Welcome Back",
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            SizedBox(
+                              width: 120,
+                              child: Text(
+                                state.profile.email ?? '',
+                                style: TextStyle(
+                                    color: Colors.black87, fontSize: 13),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()),
-                      );
-                    },
-                    child: const CircleAvatar(
-                      radius: 30.0,
-                      backgroundImage: NetworkImage(
-                        'https://avatars.githubusercontent.com/u/22272400?s=400&u=c9ca914d05b0e941d33239286e974d66590ab6f5&v=4',
-                      ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage()),
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 30.0,
+                            backgroundImage: NetworkImage(
+                              state.profile.avatar ??
+                                  'https://gravatar.com/avatar/80e178804e023758d3e51ae6e296861f?s=400&d=robohash&r=x'
+                                      '',
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
+                  );
+                }
+                return Text("no data");
+              },
             ),
 
             SizedBox(height: 10),

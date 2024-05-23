@@ -1,4 +1,6 @@
+import 'package:facemask_application/bloc/change_password/change_password_bloc.dart';
 import 'package:facemask_application/bloc/login/login_bloc.dart';
+import 'package:facemask_application/bloc/profile/profile_bloc.dart';
 import 'package:facemask_application/bloc/register/register_bloc.dart';
 import 'package:facemask_application/data/datasources/auth_datasources.dart';
 import 'package:facemask_application/presentation/pages/home_page.dart';
@@ -27,9 +29,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LoginBloc(AuthDatasource()),
         ),
-        // BlocProvider(
-        //   create: (context) => ProfileBloc(AuthDatasource()),
-        // ),
+        BlocProvider(
+          create: (context) => ProfileBloc(AuthDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => ChangePasswordBloc(AuthDatasource()),
+        ),
         // BlocProvider(
         //   create: (context) => CreateProductBloc(ProductDatasources()),
         // ),

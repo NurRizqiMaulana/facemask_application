@@ -1,14 +1,22 @@
+import 'dart:io';
+
+import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/data/models/requests/login_model.dart';
+import 'package:facemask_application/data/models/response/edit_profil_response_model.dart';
 import 'package:facemask_application/data/models/response/login_response_model.dart';
+import 'package:facemask_application/data/models/response/profil_response_mode.dart';
+import 'package:http/http.dart';
 
 import '../models/requests/register_model.dart';
 import '../models/response/register_response_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthDatasource {
+  final baseUrl = 'http://192.168.77.85:5000';
+
   Future<RegisterResponseModel> register(RegisterModel registerModel) async {
     final response = await http.post(
-      Uri.parse('https://bda7-103-166-147-253.ngrok-free.app/signup'),
+      Uri.parse('$baseUrl/signup'),
       body: registerModel.toMap(),
     );
 
@@ -18,7 +26,7 @@ class AuthDatasource {
 
   Future<LoginResponseModel> login(LoginModel loginModel) async {
     final response = await http.post(
-      Uri.parse('https://bda7-103-166-147-253.ngrok-free.app/signin'),
+      Uri.parse('$baseUrl/signin'),
       body: loginModel.toMap(),
     );
 
@@ -26,15 +34,62 @@ class AuthDatasource {
     return result;
   }
 
-  // Future<ProfileResponseModel> getProfile() async {
-  //   final token = await AuthLocalStorage().getToken();
-  //   var headers = {'Authorization': 'Bearer $token'};
-  //   final response = await http.get(
-  //     Uri.parse('https://api.escuelajs.co/api/v1/auth/profile'),
-  //     headers: headers,
-  //   );
+  Future<ProfileResponseModel> getProfile() async {
+    final token = await AuthLocalStorage().getToken();
+    var headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(
+      Uri.parse('$baseUrl/protected'),
+      headers: headers,
+    );
 
-  //   final result = ProfileResponseModel.fromJson(response.body);
-  //   return result;
-  // }
+    final result = ProfileResponseModel.fromJson(response.body);
+    return result;
+  }
+
+  Future<EditProfileResponseModel> editProfile({
+    File? avatar,
+  }) async {
+    final token = await AuthLocalStorage().getToken();
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'multipart/form-data',
+    };
+
+    var request = MultipartRequest('PUT', Uri.parse('$baseUrl/edit_profile'));
+    request.headers.addAll(headers);
+
+    if (avatar != null) {
+      request.files.add(await MultipartFile.fromPath('file', avatar.path));
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      final result = EditProfileResponseModel.fromJson(responseBody);
+      return result;
+    } else {
+      throw Exception('Failed to update profile');
+    }
+  }
+
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
+    final token = await AuthLocalStorage().getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/change_password'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change password');
+    }
+  }
 }

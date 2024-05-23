@@ -8,14 +8,14 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewState extends State<CameraView> {
   final String url =
-      'https://bda7-103-166-147-253.ngrok-free.app/video_feed'; // Replace with your Flask server URL
+      'https://9ff5-112-215-145-57.ngrok-free.app/video_feed'; // Replace with your Flask server URL
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Camera View'),
-        backgroundColor: Colors.green,
+        title: Text('Realtime Object Counting'),
+        backgroundColor: Color.fromRGBO(209, 209, 239, 1),
       ),
       body: InAppWebView(
           initialUrlRequest: URLRequest(
