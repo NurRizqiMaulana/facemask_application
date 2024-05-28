@@ -2,13 +2,13 @@
 
 import 'package:facemask_application/bloc/profile/profile_bloc.dart';
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
-import 'package:facemask_application/presentation/pages/change_password.dart';
-import 'package:facemask_application/presentation/pages/edit_profile_page.dart';
-import 'package:facemask_application/presentation/pages/login_page.dart';
+import 'package:facemask_application/presentation/pages/profile/change_password.dart';
+import 'package:facemask_application/presentation/pages/profile/edit_profile_page.dart';
+import 'package:facemask_application/presentation/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../widget/profile_widget.dart';
+import '../../widget/profile_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: const Color.fromRGBO(255, 218, 240, 1),
-                                  width: 5.0, // Lebar border
+                                  width: 2.0, // Lebar border
                                 ),
                               ),
                               child: CircleAvatar(
@@ -79,19 +79,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                             ),
-                            Text(
-                              state.profile.name ?? '',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24.0,
-                                  color: Colors.black54),
+                            // Text(
+                            //   state.profile.name ?? '',
+                            //   style: const TextStyle(
+                            //       fontWeight: FontWeight.bold,
+                            //       fontSize: 20.0,
+                            //       color: Colors.black54),
+                            // ),
+                            const SizedBox(
+                              height: 16.0,
                             ),
                             Text(
                               state.profile.email ?? '',
                               style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 16.0,
+                                  fontSize: 18.0,
                                   color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
                             ),
                           ],
                         ),
@@ -175,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             // Proses logout jika pengguna menekan "Ya"
                                             await AuthLocalStorage()
                                                 .removeToken();
-                                            Navigator.push(context,
+                                            Navigator.pushReplacement(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
                                               return const LoginPage();

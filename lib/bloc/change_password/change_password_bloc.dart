@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:facemask_application/data/models/requests/password_model.dart';
 import 'package:meta/meta.dart';
 
 import '../../data/datasources/auth_datasources.dart';
@@ -16,8 +17,7 @@ class ChangePasswordBloc
       if (event is ChangePassword) {
         emit(ChangePasswordLoading());
         try {
-          await authDatasource.changePassword(
-              event.currentPassword, event.newPassword);
+          await authDatasource.changePassword(event.passwordModel);
           emit(ChangePasswordSuccess());
         } catch (e) {
           emit(ChangePasswordFailure(e.toString()));

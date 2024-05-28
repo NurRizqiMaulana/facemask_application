@@ -30,6 +30,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         final result = await authDatasource.editProfile(
           avatar: event.avatar,
+          name: event.name,
+          email: event.email,
         );
 
         emit(ProfileUpdated(

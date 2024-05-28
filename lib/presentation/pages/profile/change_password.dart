@@ -1,4 +1,5 @@
 import 'package:facemask_application/bloc/change_password/change_password_bloc.dart';
+import 'package:facemask_application/data/models/requests/password_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,10 +9,8 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final TextEditingController currentPasswordController =
-      TextEditingController();
-
-  final TextEditingController newPasswordController = TextEditingController();
+  TextEditingController? currentPasswordController;
+  TextEditingController? newPasswordController;
 
   bool _isObscured = true;
 
@@ -19,6 +18,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     setState(() {
       _isObscured = !_isObscured;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentPasswordController = TextEditingController();
+    newPasswordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    currentPasswordController!.dispose();
+    newPasswordController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -32,6 +47,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       body: BlocListener<ChangePasswordBloc, ChangePasswordState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
+            currentPasswordController!.clear();
+            newPasswordController!.clear();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Password changed successfully')),
             );
@@ -62,7 +79,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               TextField(
                 controller: newPasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Current Password',
+                  labelText: 'New Password',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isObscured ? Icons.visibility : Icons.visibility_off,
@@ -80,12 +97,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   }
                   return ElevatedButton(
                     onPressed: () {
-                      context.read<ChangePasswordBloc>().add(
-                            ChangePassword(
-                              currentPassword: currentPasswordController.text,
-                              newPassword: newPasswordController.text,
-                            ),
-                          );
+                      final requestModel = PasswordModel(
+                          current_password: currentPasswordController!.text,
+                          new_password: newPasswordController!.text);
+                      context
+                          .read<ChangePasswordBloc>()
+                          .add(ChangePassword(passwordModel: requestModel));
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.black,

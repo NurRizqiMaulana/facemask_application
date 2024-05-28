@@ -34,7 +34,7 @@ class ProfileWidget extends StatelessWidget {
                   style: TextStyle(
                     color: Constants.blackColor,
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    // fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

@@ -1,11 +1,12 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
+import 'package:facemask_application/constants.dart';
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/presentation/pages/artikel_page.dart';
-import 'package:facemask_application/presentation/pages/login_page.dart';
-import 'package:facemask_application/presentation/pages/profile_page.dart';
-import 'package:facemask_application/presentation/pages/realtime_page.dart';
-import 'package:facemask_application/presentation/pages/realtime_web_page.dart';
+import 'package:facemask_application/presentation/pages/auth/login_page.dart';
+import 'package:facemask_application/presentation/pages/profile/profile_page.dart';
+import 'package:facemask_application/presentation/pages/detection/realtime_page.dart';
+import 'package:facemask_application/presentation/pages/detection/realtime_web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,44 +35,10 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           'Dashboard',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                // Menampilkan dialog konfirmasi
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Konfirmasi Logout"),
-                      content: Text("Anda yakin ingin keluar?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context); // Menutup dialog
-                          },
-                          child: Text("Batal"),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            // Proses logout jika pengguna menekan "Ya"
-                            await AuthLocalStorage().removeToken();
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const LoginPage();
-                            }));
-                          },
-                          child: Text("Ya"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              icon: const Icon(Icons.logout_outlined))
-        ],
+        actions: [],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -85,156 +52,174 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
                 if (state is ProfileLoaded) {
-                  return Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(209, 209, 239, 1),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        )),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 15.0),
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(209, 209, 239, 1),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Welcome Back",
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  getGreeting(),
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 210,
+                                  child: Text(
+                                    state.profile.email ?? '',
+                                    style: TextStyle(
+                                        color: Colors.black87, fontSize: 16),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            SizedBox(
-                              width: 120,
-                              child: Text(
-                                state.profile.email ?? '',
-                                style: TextStyle(
-                                    color: Colors.black87, fontSize: 13),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage()),
+                                );
+                              },
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromRGBO(255, 218, 240, 1),
+                                    width: 2.0, // Lebar border
+                                  ),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 30.0,
+                                  backgroundImage: NetworkImage(
+                                    state.profile.avatar ??
+                                        'https://gravatar.com/avatar/80e178804e023758d3e51ae6e296861f?s=400&d=robohash&r=x'
+                                            '',
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(209, 209, 239, 1),
+                          borderRadius: BorderRadius.all(Radius.circular(30)
+                              // topLeft: Radius.circular(30),
+                              // topRight: Radius.circular(30),
+                              ),
+                        ),
+                        padding: const EdgeInsets.all(
+                            20), // Padding untuk kontainer kedua
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Protect yourself and your love once',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      height:
+                                          10), // Spasi antara teks dan gambar
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Pindah ke halaman CameraAccessPage saat tombol ditekan
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const YoloVideo()),
+                                      );
+                                    },
+                                    child: const Text('Get Started'),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
+                            const SizedBox(
+                                width:
+                                    20), // Spasi antara gambar dan teks/tombol
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Image.asset(
+                                  'images/bgHP.png', // Ubah dengan path gambar yang sesuai
+                                  width:
+                                      150, // Sesuaikan lebar gambar sesuai kebutuhan
+                                  height:
+                                      150, // Sesuaikan tinggi gambar sesuai kebutuhan
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfilePage()),
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 30.0,
-                            backgroundImage: NetworkImage(
-                              state.profile.avatar ??
-                                  'https://gravatar.com/avatar/80e178804e023758d3e51ae6e296861f?s=400&d=robohash&r=x'
-                                      '',
-                            ),
+                      ),
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2, // Jumlah kolom
+                        crossAxisSpacing: 20, // Spasi antar kolom
+                        mainAxisSpacing: 20, // Spasi antar baris
+                        padding:
+                            const EdgeInsets.all(30), // Padding untuk grid view
+                        children: [
+                          _buildColumn(
+                            'HandShake',
+                            'images/img1.png',
+                            const Color.fromRGBO(255, 218, 240, 1),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return Text("no data");
-              },
-            ),
-
-            SizedBox(height: 10),
-
-            const SizedBox(height: 20), // Spasi antara kedua kontainer
-            Container(
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(209, 209, 239, 1),
-                borderRadius: BorderRadius.all(Radius.circular(30)
-                    // topLeft: Radius.circular(30),
-                    // topRight: Radius.circular(30),
-                    ),
-              ),
-              padding:
-                  const EdgeInsets.all(20), // Padding untuk kontainer kedua
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Protect yourself and your love once',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(
-                            height: 10), // Spasi antara teks dan gambar
-                        ElevatedButton(
-                          onPressed: () {
-                            // Pindah ke halaman CameraAccessPage saat tombol ditekan
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const YoloVideo()),
-                            );
-                          },
-                          child: const Text('Get Started'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                      width: 20), // Spasi antara gambar dan teks/tombol
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Image.asset(
-                        'images/bgHP.png', // Ubah dengan path gambar yang sesuai
-                        width: 150, // Sesuaikan lebar gambar sesuai kebutuhan
-                        height: 150, // Sesuaikan tinggi gambar sesuai kebutuhan
+                          _buildColumnWithButton('FaceMask', 'images/img2.png',
+                              const Color.fromRGBO(209, 209, 239, 1), () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CameraView();
+                            }));
+                          }),
+                          _buildColumnWithButton('Article', 'images/img3.png',
+                              const Color.fromRGBO(209, 209, 239, 1), () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const ArtikelPage();
+                            }));
+                          }),
+                          _buildColumn('Wash Hand', 'images/img4.png',
+                              const Color.fromRGBO(255, 218, 240, 1)),
+                        ],
                       ),
                     ],
-                  ),
-                ],
-              ),
-            ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2, // Jumlah kolom
-              crossAxisSpacing: 20, // Spasi antar kolom
-              mainAxisSpacing: 20, // Spasi antar baris
-              padding: const EdgeInsets.all(30), // Padding untuk grid view
-              children: [
-                _buildColumn(
-                  'HandShake',
-                  'images/img1.png',
-                  const Color.fromRGBO(255, 218, 240, 1),
-                ),
-                _buildColumnWithButton('FaceMask', 'images/img2.png',
-                    const Color.fromRGBO(209, 209, 239, 1), () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return CameraView();
-                  }));
-                }),
-                _buildColumnWithButton('Article', 'images/img3.png',
-                    const Color.fromRGBO(209, 209, 239, 1), () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const ArticlePage();
-                  }));
-                }),
-                _buildColumn('Wash Hand', 'images/img4.png',
-                    const Color.fromRGBO(255, 218, 240, 1)),
-              ],
+                  );
+                }
+                return Center(child: Text("no data"));
+              },
             ),
           ],
         ),

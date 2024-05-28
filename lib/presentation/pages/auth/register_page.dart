@@ -4,7 +4,7 @@ import 'package:facemask_application/bloc/register/register_bloc.dart';
 import 'package:facemask_application/bloc/register/register_event.dart';
 import 'package:facemask_application/bloc/register/register_state.dart';
 import 'package:facemask_application/data/models/requests/register_model.dart';
-import 'package:facemask_application/presentation/pages/login_page.dart';
+import 'package:facemask_application/presentation/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -158,6 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               .read<RegisterBloc>()
                               .add(SaveRegisterEvent(request: requestModel));
                         },
+                        // style: ElevatedButton.styleFrom(fore),
                         child: const Text('Register'),
                       );
                     },

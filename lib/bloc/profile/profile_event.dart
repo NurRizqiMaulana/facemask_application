@@ -6,13 +6,13 @@ abstract class ProfileEvent {}
 class GetProfileEvent extends ProfileEvent {}
 
 class EditProfileEvent extends ProfileEvent {
-  // final String name;
-  // final String email;
   final File? avatar;
+  final String? name;
+  final String? email;
 
   EditProfileEvent({
-    // required this.name,
-    // required this.email,
     this.avatar,
+    required this.name,
+    required this.email,
   });
 }

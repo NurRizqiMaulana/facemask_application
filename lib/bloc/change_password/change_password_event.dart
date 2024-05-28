@@ -4,8 +4,7 @@ part of 'change_password_bloc.dart';
 abstract class ChangePasswordEvent {}
 
 class ChangePassword extends ChangePasswordEvent {
-  final String currentPassword;
-  final String newPassword;
+  final PasswordModel passwordModel;
 
-  ChangePassword({required this.currentPassword, required this.newPassword});
+  ChangePassword({required this.passwordModel});
 }
