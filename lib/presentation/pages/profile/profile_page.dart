@@ -75,17 +75,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 radius: 50,
                                 backgroundImage: NetworkImage(
                                   state.profile.avatar ??
-                                      'https://gravatar.com/avatar/80e178804e023758d3e51ae6e296861f?s=400&d=robohash&r=x',
+                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAdmCtWjfGHEabmDXtRwRDMQ1RLh2v1gxGKA&s',
                                 ),
                               ),
                             ),
-                            // Text(
-                            //   state.profile.name ?? '',
-                            //   style: const TextStyle(
-                            //       fontWeight: FontWeight.bold,
-                            //       fontSize: 20.0,
-                            //       color: Colors.black54),
-                            // ),
                             const SizedBox(
                               height: 16.0,
                             ),
@@ -132,7 +125,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-
                             ProfileWidget(
                               icon: Icons.security,
                               title: 'Change Password',
@@ -150,14 +142,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               title: 'About',
                               onTap: () {},
                             ),
-                            // ProfileWidget(
-                            //   icon: Icons.chat,
-                            //   title: 'FAQs',
-                            // ),
-                            // ProfileWidget(
-                            //   icon: Icons.share,
-                            //   title: 'Share',
-                            // ),
                             ProfileWidget(
                               icon: Icons.logout,
                               title: 'Log Out',
@@ -184,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             Navigator.pushReplacement(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return const LoginPage();
+                                              return LoginPage();
                                             }));
                                           },
                                           child: Text("Ya"),

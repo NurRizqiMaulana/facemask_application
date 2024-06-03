@@ -3,13 +3,12 @@ import 'package:facemask_application/bloc/change_password/change_password_bloc.d
 import 'package:facemask_application/bloc/login/login_bloc.dart';
 import 'package:facemask_application/bloc/profile/profile_bloc.dart';
 import 'package:facemask_application/bloc/register/register_bloc.dart';
+import 'package:facemask_application/bloc/reset_password/reset_password_bloc.dart';
 import 'package:facemask_application/data/datasources/artikel_datasources.dart';
 import 'package:facemask_application/data/datasources/auth_datasources.dart';
-import 'package:facemask_application/presentation/pages/home_page.dart';
 import 'package:facemask_application/presentation/pages/auth/login_page.dart';
 import 'package:facemask_application/presentation/pages/onboarding_page.dart';
-import 'package:facemask_application/presentation/pages/profile/profile_page.dart';
-import 'package:facemask_application/presentation/pages/auth/register_page.dart';
+import 'package:facemask_application/presentation/pages/reset_password/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,9 +36,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ChangePasswordBloc(AuthDatasource()),
         ),
-        // BlocProvider(
-        //   create: (context) => CreateProductBloc(ProductDatasources()),
-        // ),
+        BlocProvider(
+          create: (context) => ResetPasswordBloc(AuthDatasource()),
+        ),
         BlocProvider(
           create: (context) => ArtikelBloc(ArtikelDatasources()),
         ),
@@ -50,7 +49,11 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoginPage(),
+        home: const OnboardingPage1(),
+        routes: {
+          '/confirm-reset-password': (context) => ConfirmResetPasswordScreen(
+              token: ModalRoute.of(context)!.settings.arguments as String),
+        },
       ),
     );
   }

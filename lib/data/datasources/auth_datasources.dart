@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
@@ -17,22 +18,31 @@ class AuthDatasource {
 
   Future<RegisterResponseModel> register(RegisterModel registerModel) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/signup'),
+      Uri.parse('$baseUrl/register'),
       body: registerModel.toMap(),
     );
 
-    final result = RegisterResponseModel.fromJson(response.body);
-    return result;
+    if (response.statusCode == 201) {
+      final result = RegisterResponseModel.fromJson(response.body);
+      return result;
+    } else {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
   }
 
   Future<LoginResponseModel> login(LoginModel loginModel) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/signin'),
+      Uri.parse('$baseUrl/login'),
       body: loginModel.toMap(),
     );
 
-    final result = LoginResponseModel.fromJson(response.body);
-    return result;
+    if (response.statusCode == 200) {
+      return LoginResponseModel.fromJson(response.body);
+    } else {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
   }
 
   Future<ProfileResponseModel> getProfile() async {
@@ -91,12 +101,39 @@ class AuthDatasource {
       body: passwordModel.toMap(),
     );
 
-    final result = EditProfileResponseModel.fromJson(response.body);
-
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
+      final result = EditProfileResponseModel.fromJson(response.body);
+      return result;
+    } else {
       throw Exception('current password is wrong!');
     }
+  }
 
-    return result;
+  Future<void> resetPasswordRequest(String email) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/reset_password_request'),
+      body: {'email': email},
+    );
+
+    if (response.statusCode != 200) {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
+  }
+
+  Future<void> resetPasswordConfirm(
+      String token, String newPassword, String confirmPassword) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/reset_password/$token'),
+      body: {
+        'new_password': newPassword,
+        'confirm_password': confirmPassword,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
   }
 }

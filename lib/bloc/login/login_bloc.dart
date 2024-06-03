@@ -19,7 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await AuthLocalStorage().saveToken(result.accessToken);
         emit(LoginLoaded(loginResponseModel: result));
       } catch (e) {
-        emit(LoginError(message: "Jaringan Terputus"));
+        emit(LoginError(message: e.toString()));
       }
     });
   }

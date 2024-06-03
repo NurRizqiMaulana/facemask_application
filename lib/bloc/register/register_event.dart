@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 abstract class RegisterEvent {}
 
 class SaveRegisterEvent extends RegisterEvent {
-  final RegisterModel request;
+  final RegisterModel registerModel;
 
-  SaveRegisterEvent({required this.request});
+  SaveRegisterEvent({required this.registerModel});
 }

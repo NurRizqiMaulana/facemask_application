@@ -1,10 +1,9 @@
-// ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
-
 import 'package:facemask_application/bloc/login/login_bloc.dart';
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/data/models/requests/login_model.dart';
 import 'package:facemask_application/presentation/pages/home_page.dart';
 import 'package:facemask_application/presentation/pages/auth/register_page.dart';
+import 'package:facemask_application/presentation/pages/reset_password/request_password_reset_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -66,130 +65,163 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/bg.png'),
-            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'images/bg.png'), // Ganti dengan path gambar latar belakang yang sesuai
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Login Page",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              Image.asset(
-                'images/logoAuth.png',
-                width: 200,
-                height: 250,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  errorText: emailError,
-                ),
-                controller: emailController,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  errorText: passwordError,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isObscured ? Icons.visibility : Icons.visibility_off,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 100), // Add some space at the top
+                  const Text(
+                    "Login Page",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
                     ),
-                    onPressed: _togglePasswordVisibility,
                   ),
-                ),
-                obscureText: _isObscured,
-                controller: passwordController,
-              ),
-              const SizedBox(height: 16),
-              BlocConsumer<LoginBloc, LoginState>(
-                listener: (context, state) {
-                  if (state is LoginLoaded) {
-                    emailController.clear();
-                    passwordController.clear();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.blue,
-                        content: Text(
-                          'Successful Login',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                  const SizedBox(height: 16.0),
+                  Image.asset(
+                    'images/logoAuth.png',
+                    width: 200,
+                    height: 250,
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                          errorText: emailError,
+                        ),
+                        controller: emailController,
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          border: OutlineInputBorder(),
+                          errorText: passwordError,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isObscured
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: _togglePasswordVisibility,
+                          ),
+                        ),
+                        obscureText: _isObscured,
+                        controller: passwordController,
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ResetPasswordScreen();
+                            }));
+                          },
+                          child: const Text(
+                            'Forget password',
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                color: Colors.blue),
+                          ),
                         ),
                       ),
-                    );
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const HomePage();
-                    }));
-                  } else if (state is LoginError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          state.message,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  if (state is LoginLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                    ),
-                    onPressed: () {
-                      validateInputs();
-                      if (emailError == null && passwordError == null) {
-                        final requestModel = LoginModel(
-                          email: emailController.text,
-                          password: passwordController.text,
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  BlocConsumer<LoginBloc, LoginState>(
+                    listener: (context, state) {
+                      if (state is LoginLoaded) {
+                        emailController.clear();
+                        passwordController.clear();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.blue,
+                            content: Text(
+                              'Successful Login',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         );
-                        context
-                            .read<LoginBloc>()
-                            .add(DoLoginEvent(loginModel: requestModel));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const HomePage();
+                        }));
+                      } else if (state is LoginError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              state.message,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
                       }
                     },
-                    child: const Text('Login'),
-                  );
-                },
+                    builder: (context, state) {
+                      if (state is LoginLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.blue,
+                        ),
+                        onPressed: () {
+                          validateInputs();
+                          if (emailError == null && passwordError == null) {
+                            final requestModel = LoginModel(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                            context
+                                .read<LoginBloc>()
+                                .add(DoLoginEvent(loginModel: requestModel));
+                          }
+                        },
+                        child: const Text('Login'),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const RegisterPage();
+                      }));
+                    },
+                    child: const Text(
+                      'Belum Punya Akun? Register',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
+                  ),
+                  const SizedBox(height: 100),
+                ],
               ),
-              const SizedBox(height: 16),
-              InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return const RegisterPage();
-                  }));
-                },
-                child: const Text(
-                  'Belum Punya Akun? Register',
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

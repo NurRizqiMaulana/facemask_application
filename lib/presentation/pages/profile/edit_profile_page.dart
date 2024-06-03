@@ -80,9 +80,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             radius: 50,
                             backgroundImage: _image != null
                                 ? FileImage(_image!)
-                                : NetworkImage(state.profile.avatar ??
-                                        'https://example.com/default-avatar.png')
-                                    as ImageProvider,
+                                : NetworkImage(
+                                    state.profile.avatar ??
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAdmCtWjfGHEabmDXtRwRDMQ1RLh2v1gxGKA&s',
+                                  ) as ImageProvider,
                           ),
                           const Positioned(
                             bottom: 0,
@@ -127,6 +128,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ));
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue,
+                      ),
                       child: Text('Save'),
                     ),
                   ],

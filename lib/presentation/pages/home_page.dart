@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                                   radius: 30.0,
                                   backgroundImage: NetworkImage(
                                     state.profile.avatar ??
-                                        'https://gravatar.com/avatar/80e178804e023758d3e51ae6e296861f?s=400&d=robohash&r=x'
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAdmCtWjfGHEabmDXtRwRDMQ1RLh2v1gxGKA&s'
                                             '',
                                   ),
                                 ),
@@ -160,6 +160,10 @@ class _HomePageState extends State<HomePage> {
                                                 const YoloVideo()),
                                       );
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.blue,
+                                    ),
                                     child: const Text('Get Started'),
                                   ),
                                 ],
@@ -218,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   );
                 }
-                return Center(child: Text("no data"));
+                return Center(child: Text("Kesalahan Jaringan"));
               },
             ),
           ],
@@ -245,7 +249,7 @@ Widget _buildColumn(String text, String imagePath, Color backgroundColor) {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ],
@@ -271,6 +275,10 @@ Widget _buildColumnWithButton(String buttonText, String imagePath,
             // Panggil tindakan yang sesuai berdasarkan kondisi
             onPressed();
           },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blue,
+          ),
           child: Text(buttonText),
         ),
       ],

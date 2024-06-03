@@ -9,7 +9,13 @@ class RegisterInitial extends RegisterState {}
 class RegisterLoading extends RegisterState {}
 
 class RegisterLoaded extends RegisterState {
-  final RegisterResponseModel model;
+  final RegisterResponseModel registerResponseModel;
 
-  RegisterLoaded({required this.model});
+  RegisterLoaded({required this.registerResponseModel});
+}
+
+class RegisterError extends RegisterState {
+  final String message;
+
+  RegisterError({required this.message});
 }

@@ -4,7 +4,7 @@ import 'package:facemask_application/data/models/response/artikel_response_model
 import 'package:http/http.dart' as http;
 
 class ArtikelDatasources {
-  final baseUrl = 'http://192.168.77.85:5000';
+  final baseUrl = 'http://192.168.229.85:5000';
 
   // Future<List<ArtikelResponseModel>> getAllProduct() async {
   //   final response = await http.get(

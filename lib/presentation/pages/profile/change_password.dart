@@ -105,8 +105,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           .add(ChangePassword(passwordModel: requestModel));
                     },
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Color.fromRGBO(209, 209, 239, 1),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue,
                     ),
                     child: Text('Change Password'),
                   );

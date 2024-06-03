@@ -22,6 +22,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isObscured = true;
 
+  String? nameError;
+  String? emailError;
+  String? passwordError;
+
   void _togglePasswordVisibility() {
     setState(() {
       _isObscured = !_isObscured;
@@ -44,6 +48,16 @@ class _RegisterPageState extends State<RegisterPage> {
     emailController!.dispose();
     passwordController!.dispose();
     super.dispose();
+  }
+
+  void validateInputs() {
+    setState(() {
+      nameError = nameController!.text.isEmpty ? 'Name cannot be empty' : null;
+      emailError =
+          emailController!.text.isEmpty ? 'Email cannot be empty' : null;
+      passwordError =
+          passwordController!.text.isEmpty ? 'Password cannot be empty' : null;
+    });
   }
 
   @override
@@ -86,9 +100,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 16,
                   ),
                   TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Name',
                       border: OutlineInputBorder(),
+                      errorText: nameError,
                     ),
                     controller: nameController,
                   ),
@@ -96,9 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 16,
                   ),
                   TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(),
+                      errorText: emailError,
                     ),
                     controller: emailController,
                   ),
@@ -109,6 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
+                      errorText: passwordError,
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscured ? Icons.visibility : Icons.visibility_off,
@@ -130,14 +147,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         passwordController!.clear();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 0, 255, 8),
-                              content: Text('Email: berhasil didaftarkan')),
+                            content: Text(state.registerResponseModel.message!),
+                          ),
                         );
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return const LoginPage();
                         }));
+                      } else if (state is RegisterError) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(state.message)));
                       }
                     },
                     builder: (context, state) {
@@ -148,16 +168,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       return ElevatedButton(
                         onPressed: () {
-                          final requestModel = RegisterModel(
-                            name: nameController!.text,
-                            email: emailController!.text,
-                            password: passwordController!.text,
-                          );
+                          validateInputs();
 
-                          context
-                              .read<RegisterBloc>()
-                              .add(SaveRegisterEvent(request: requestModel));
+                          if (nameError == null &&
+                              emailError == null &&
+                              passwordError == null) {
+                            final requestModel = RegisterModel(
+                              name: nameController!.text,
+                              email: emailController!.text,
+                              password: passwordController!.text,
+                            );
+
+                            context.read<RegisterBloc>().add(
+                                SaveRegisterEvent(registerModel: requestModel));
+                          }
                         },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white // Background color
+                            ),
                         // style: ElevatedButton.styleFrom(fore),
                         child: const Text('Register'),
                       );
@@ -165,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
+                      Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
                         return const LoginPage();
                       }));
