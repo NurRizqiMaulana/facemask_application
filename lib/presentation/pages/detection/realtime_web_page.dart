@@ -8,7 +8,9 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewState extends State<CameraView> {
   final String url =
-      'http://192.168.229.85:5000/video_feed'; // Replace with your Flask server URL
+      'http://192.168.37.85:5000/video_feed'; // Ganti dengan URL server Flask Anda
+
+  bool _isLoading = true; // Variabel untuk mengelola status loading
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +19,33 @@ class _CameraViewState extends State<CameraView> {
         title: Text('Realtime Object Counting'),
         backgroundColor: Color.fromRGBO(209, 209, 239, 1),
       ),
-      body: InAppWebView(
-          initialUrlRequest: URLRequest(
-        url: WebUri.uri(Uri.parse(url)),
-      )),
+      body: Column(
+        children: [
+          _isLoading
+              ? LinearProgressIndicator()
+              : SizedBox
+                  .shrink(), // Menggunakan SizedBox.shrink untuk menghilangkan widget jika tidak diperlukan
+          Expanded(
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(
+                url: WebUri.uri(Uri.parse(url)),
+              ),
+              onLoadStart: (controller, url) {
+                // Set status loading ke true ketika halaman mulai dimuat
+                setState(() {
+                  _isLoading = true;
+                });
+              },
+              onLoadStop: (controller, url) async {
+                // Set status loading ke false ketika halaman selesai dimuat
+                setState(() {
+                  _isLoading = false;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -165,11 +165,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                             // Proses logout jika pengguna menekan "Ya"
                                             await AuthLocalStorage()
                                                 .removeToken();
-                                            Navigator.pushReplacement(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return LoginPage();
-                                            }));
+
+                                            // Hapus semua rute sebelumnya dan buka halaman login
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LoginPage()),
+                                              (Route<dynamic> route) => false,
+                                            );
                                           },
                                           child: Text("Ya"),
                                         ),

@@ -1,12 +1,11 @@
 // ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables
 
 import 'package:facemask_application/constants.dart';
-import 'package:facemask_application/data/localsources/auth_local_storage.dart';
 import 'package:facemask_application/presentation/pages/artikel_page.dart';
-import 'package:facemask_application/presentation/pages/auth/login_page.dart';
 import 'package:facemask_application/presentation/pages/profile/profile_page.dart';
 import 'package:facemask_application/presentation/pages/detection/realtime_page.dart';
 import 'package:facemask_application/presentation/pages/detection/realtime_web_page.dart';
+import 'package:facemask_application/presentation/pages/visualization_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -112,8 +111,7 @@ class _HomePageState extends State<HomePage> {
                                   radius: 30.0,
                                   backgroundImage: NetworkImage(
                                     state.profile.avatar ??
-                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAdmCtWjfGHEabmDXtRwRDMQ1RLh2v1gxGKA&s'
-                                            '',
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAdmCtWjfGHEabmDXtRwRDMQ1RLh2v1gxGKA&s',
                                   ),
                                 ),
                               ),
@@ -156,8 +154,7 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const YoloVideo()),
+                                            builder: (context) => CameraView()),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -201,11 +198,11 @@ class _HomePageState extends State<HomePage> {
                             'images/img1.png',
                             const Color.fromRGBO(255, 218, 240, 1),
                           ),
-                          _buildColumnWithButton('FaceMask', 'images/img2.png',
+                          _buildColumnWithButton('History', 'images/img2.png',
                               const Color.fromRGBO(209, 209, 239, 1), () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return CameraView();
+                              return HistoryPage();
                             }));
                           }),
                           _buildColumnWithButton('Article', 'images/img3.png',

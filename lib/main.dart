@@ -1,12 +1,13 @@
 import 'package:facemask_application/bloc/artikel/artikel_bloc.dart';
 import 'package:facemask_application/bloc/change_password/change_password_bloc.dart';
+import 'package:facemask_application/bloc/history/history_bloc.dart';
 import 'package:facemask_application/bloc/login/login_bloc.dart';
 import 'package:facemask_application/bloc/profile/profile_bloc.dart';
 import 'package:facemask_application/bloc/register/register_bloc.dart';
 import 'package:facemask_application/bloc/reset_password/reset_password_bloc.dart';
 import 'package:facemask_application/data/datasources/artikel_datasources.dart';
 import 'package:facemask_application/data/datasources/auth_datasources.dart';
-import 'package:facemask_application/presentation/pages/auth/login_page.dart';
+import 'package:facemask_application/data/datasources/history_datasources.dart';
 import 'package:facemask_application/presentation/pages/onboarding_page.dart';
 import 'package:facemask_application/presentation/pages/reset_password/reset_password_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ArtikelBloc(ArtikelDatasources()),
+        ),
+        BlocProvider(
+          create: (context) => HistoryBloc(HistoryDatasources()),
         ),
       ],
       child: MaterialApp(

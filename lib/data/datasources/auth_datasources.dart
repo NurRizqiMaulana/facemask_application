@@ -14,11 +14,18 @@ import '../models/response/register_response_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthDatasource {
-  final baseUrl = 'http://192.168.229.85:5000';
+  final baseUrl = 'http://192.168.37.85:5000';
+  final apiKey =
+      'JYtMmjJrhrjiinuhn8shGkBCPEWQVY8b'; // Gantilah dengan API key yang sesuai
 
   Future<RegisterResponseModel> register(RegisterModel registerModel) async {
     final response = await http.post(
       Uri.parse('$baseUrl/register'),
+      headers: {
+        'Content-Type':
+            'application/x-www-form-urlencoded', // Sesuaikan dengan konten yang diharapkan oleh server
+        'x-api-key': apiKey, // Menambahkan API key ke header
+      },
       body: registerModel.toMap(),
     );
 
@@ -32,9 +39,18 @@ class AuthDatasource {
   }
 
   Future<LoginResponseModel> login(LoginModel loginModel) async {
+    // Menggabungkan email dan password
+    String credentials = '${loginModel.email}:${loginModel.password}';
+    // Melakukan encoding Base64
+    String base64Credentials = base64Encode(utf8.encode(credentials));
+
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
-      body: loginModel.toMap(),
+      headers: {
+        'Authorization': 'Basic $base64Credentials',
+        'Content-Type': 'application/json',
+      },
+      // body: loginModel.toMap(),
     );
 
     if (response.statusCode == 200) {

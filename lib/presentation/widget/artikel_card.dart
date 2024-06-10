@@ -18,16 +18,16 @@ class ArtikelCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Placeholder for an image
-            Container(
-              height: 200,
-              color: Colors.grey[300],
-              child: Center(
-                child: Text(
-                  'Image Placeholder',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-              ),
-            ),
+            // Container(
+            //   height: 200,
+            //   color: Colors.grey[300],
+            //   child: Center(
+            //     child: Text(
+            //       'Image Placeholder',
+            //       style: TextStyle(color: Colors.grey[700]),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 10.0),
             Text(
               artikel.judul,
