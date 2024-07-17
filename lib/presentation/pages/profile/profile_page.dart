@@ -2,6 +2,7 @@
 
 import 'package:facemask_application/bloc/profile/profile_bloc.dart';
 import 'package:facemask_application/data/localsources/auth_local_storage.dart';
+import 'package:facemask_application/presentation/pages/profile/about_page.dart';
 import 'package:facemask_application/presentation/pages/profile/change_password.dart';
 import 'package:facemask_application/presentation/pages/profile/edit_profile_page.dart';
 import 'package:facemask_application/presentation/pages/auth/login_page.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widget/profile_widget.dart';
+import 'change_email_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -125,6 +127,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
+                            // ProfileWidget(
+                            //   icon: Icons.email_sharp,
+                            //   title: 'Change Email Address',
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) =>
+                            //               RequestChangeEmailScreen()),
+                            //     );
+                            //   },
+                            // ),
                             ProfileWidget(
                               icon: Icons.security,
                               title: 'Change Password',
@@ -140,7 +154,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             ProfileWidget(
                               icon: Icons.info,
                               title: 'About',
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AboutPage()),
+                                );
+                              },
                             ),
                             ProfileWidget(
                               icon: Icons.logout,

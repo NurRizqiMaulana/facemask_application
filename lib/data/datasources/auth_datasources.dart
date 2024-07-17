@@ -14,7 +14,7 @@ import '../models/response/register_response_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthDatasource {
-  final baseUrl = 'http://192.168.37.85:5000';
+  final baseUrl = 'http://192.168.163.85:5000';
   final apiKey =
       'JYtMmjJrhrjiinuhn8shGkBCPEWQVY8b'; // Gantilah dengan API key yang sesuai
 
@@ -49,6 +49,7 @@ class AuthDatasource {
       headers: {
         'Authorization': 'Basic $base64Credentials',
         'Content-Type': 'application/json',
+        'x-api-key': apiKey, // Menambahkan API key ke header
       },
       // body: loginModel.toMap(),
     );
@@ -81,6 +82,7 @@ class AuthDatasource {
     final token = await AuthLocalStorage().getToken();
     var headers = {
       'Authorization': 'Bearer $token',
+      'x-api-key': apiKey, // Menambahkan API key ke header
       // 'Content-Type': 'multipart/form-data',
     };
 
@@ -113,6 +115,7 @@ class AuthDatasource {
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/x-www-form-urlencoded',
+        'x-api-key': apiKey, // Menambahkan API key ke header
       },
       body: passwordModel.toMap(),
     );
@@ -121,13 +124,17 @@ class AuthDatasource {
       final result = EditProfileResponseModel.fromJson(response.body);
       return result;
     } else {
-      throw Exception('current password is wrong!');
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
     }
   }
 
   Future<void> resetPasswordRequest(String email) async {
     final response = await http.post(
       Uri.parse('$baseUrl/reset_password_request'),
+      headers: {
+        'x-api-key': apiKey, // Menambahkan API key ke header
+      },
       body: {'email': email},
     );
 
@@ -145,6 +152,41 @@ class AuthDatasource {
         'new_password': newPassword,
         'confirm_password': confirmPassword,
       },
+    );
+
+    if (response.statusCode != 200) {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
+  }
+
+  Future<void> changeEmailRequest(String email) async {
+    final token = await AuthLocalStorage().getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/request_change_email'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'x-api-key': apiKey, // Menambahkan API key ke header
+      },
+      body: {'new_email': email},
+    );
+
+    if (response.statusCode != 200) {
+      final errorResponse = jsonDecode(response.body);
+      throw Exception(errorResponse['message']);
+    }
+  }
+
+  Future<void> confirmEmailOTP(String otp) async {
+    final token = await AuthLocalStorage().getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/confirm_change_email'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-api-key': apiKey, // Menambahkan API key ke header
+      },
+      body: {'otp': otp},
     );
 
     if (response.statusCode != 200) {

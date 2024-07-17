@@ -8,7 +8,7 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewState extends State<CameraView> {
   final String url =
-      'http://192.168.37.85:5000/video_feed'; // Ganti dengan URL server Flask Anda
+      'http://192.168.163.85:5000/video_feed'; // Ganti dengan URL server Flask Anda
 
   bool _isLoading = true; // Variabel untuk mengelola status loading
 
@@ -34,6 +34,9 @@ class _CameraViewState extends State<CameraView> {
                 // Set status loading ke true ketika halaman mulai dimuat
                 setState(() {
                   _isLoading = true;
+                });
+                setState(() {
+                  _isLoading = false;
                 });
               },
               onLoadStop: (controller, url) async {

@@ -76,9 +76,9 @@ flutter:
   assets:
     - images/
     - assets/images/
-    - assets/best50_float32.tflite
-    - assets/label.txt
-    - assets/best.tflite
+    # - assets/best50_float32.tflite
+    # - assets/label.txt
+    # - assets/best.tflite
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,6 @@
 import 'package:facemask_application/bloc/artikel/artikel_bloc.dart';
 import 'package:facemask_application/bloc/change_password/change_password_bloc.dart';
+import 'package:facemask_application/bloc/confirm_otp/confirm_otp_bloc.dart';
 import 'package:facemask_application/bloc/history/history_bloc.dart';
 import 'package:facemask_application/bloc/login/login_bloc.dart';
 import 'package:facemask_application/bloc/profile/profile_bloc.dart';
@@ -9,9 +10,10 @@ import 'package:facemask_application/data/datasources/artikel_datasources.dart';
 import 'package:facemask_application/data/datasources/auth_datasources.dart';
 import 'package:facemask_application/data/datasources/history_datasources.dart';
 import 'package:facemask_application/presentation/pages/onboarding_page.dart';
-import 'package:facemask_application/presentation/pages/reset_password/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/change_email/change_email_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,6 +48,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HistoryBloc(HistoryDatasources()),
         ),
+        BlocProvider(
+          create: (context) => ChangeEmailBloc(AuthDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => ConfirmOtpBloc(AuthDatasource()),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -54,10 +62,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const OnboardingPage1(),
-        routes: {
-          '/confirm-reset-password': (context) => ConfirmResetPasswordScreen(
-              token: ModalRoute.of(context)!.settings.arguments as String),
-        },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

@@ -37,7 +37,7 @@ class _OnboardingPage1State extends State<OnboardingPage1> {
           OnboardingPageModel(
             title: 'Selamat Datang',
             description:
-                'FaceMask adalah aplikasi yang dirancang untuk melakukan monitoring penggunaan masker guna meminimalisir penyebaran penyakit.',
+                'MaskcareApp adalah aplikasi yang dirancang untuk melakukan monitoring penggunaan masker guna meminimalisir penyebaran penyakit.',
             imageUrl: 'assets/images/ob1.png',
             bgColor: Colors.white,
           ),
